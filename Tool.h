@@ -39,11 +39,17 @@ public:
 	template <typename T>
 	static void bubbleSort(std::vector<T>& items);
 
-	template <typename ITR>
-	static void quickSort(ITR itrL, ITR itrR);
+	template <typename Iterator>
+	static void quickSort(Iterator itrL, Iterator itrR);
+
+	template <typename T>
+	static void insertSort(std::vector<T>& items);
+
+	template <typename T>
+	static void binaryInsertSort(std::vector<T>& items);
 
 private:
-	static Tool tool;///< 静态成员，在Tool构造函数中进行程序初始化，如生成随机数种子
+	static Tool tool;///< Initialize the program, such as set random seed.
 	Tool(void);
 
 };
@@ -71,7 +77,8 @@ void Tool::show(const std::vector<T>& numSet, int itemsPerLine)
 		}
 	}
 
-	PrintLn(text);
+	if (!text.empty())
+		PrintLn(text);
 }
 
 template <typename T>
@@ -83,11 +90,11 @@ void Tool::bubbleSort(std::vector<T>& items)
 				std::swap(*itrA, *itrB);
 }
 
-template <typename ITR>
-void Tool::quickSort(ITR begin, ITR end)
+template <typename Iterator>
+void Tool::quickSort(Iterator begin, Iterator end)
 {
-	ITR l = begin;
-	ITR r = end;
+	auto l = begin;
+	auto r = end;
 	auto key = *begin;
 
 	while (l < r)
@@ -105,4 +112,47 @@ void Tool::quickSort(ITR begin, ITR end)
 
 	if (end - l > 1)
 		quickSort(l + 1, end);
+}
+
+template <typename T>
+void Tool::insertSort(std::vector<T>& items)
+{
+	T temp;
+	int count = items.size();
+	for (int i = 0; i < count; ++i)
+	{
+		temp = items[i];
+		int j = i - 1;
+		for (; j >= 0 && items[j] > temp; --j)
+			items[j + 1] = items[j];
+
+		items[j + 1] = temp;
+	}
+}
+
+template <typename T>
+void Tool::binaryInsertSort(std::vector<T>& items)
+{
+	T temp;
+	int count = items.size();
+	for (int i = 1; i < count; ++i)
+	{
+		temp = items[i];
+
+		int low = 0;
+		int high = i - 1;
+		while (low <= high)
+		{
+			int mid = (low + high) / 2;
+			if (temp < items[mid])//Stable sorting result: a < b < c <= low = high < d < e
+				high = mid - 1;
+			else
+				low = mid + 1;
+		}
+
+		for (int j = i - 1; j >= high + 1; --j)
+			items[j + 1] = items[j];
+
+		items[high + 1] = temp;
+	}
 }
