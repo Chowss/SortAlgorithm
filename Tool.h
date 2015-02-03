@@ -48,6 +48,9 @@ public:
 	template <typename T>
 	static void binaryInsertSort(std::vector<T>& items);
 
+	template <typename T>
+	static void cocktailSort(std::vector<T>& items);
+
 private:
 	static Tool tool;///< Initialize the program, such as set random seed.
 	Tool(void);
@@ -154,5 +157,22 @@ void Tool::binaryInsertSort(std::vector<T>& items)
 			items[j + 1] = items[j];
 
 		items[high + 1] = temp;
+	}
+}
+
+template <typename T>
+void Tool::cocktailSort(std::vector<T>& items)
+{
+	int count = items.size();
+	int halfCount = count / 2;
+	for (int i = 0; i < halfCount; ++i)
+	{
+		for (int j = i + 1; j < count - i; ++j)
+			if (items[j - 1] > items[j])
+				std::swap(items[j - 1], items[j]);
+
+		for (int j = count - i - 2; j > i; --j)
+			if (items[j - 1] > items[j])
+				std::swap(items[j - 1], items[j]);
 	}
 }
