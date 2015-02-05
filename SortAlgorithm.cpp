@@ -32,10 +32,16 @@ int main()
 	Tool::binaryInsertSort(numSet);
 	Tool::show(numSet);
 
-	cout << "\nCocktail sort sort" << endl;
+	cout << "\nCocktail sort" << endl;
 	Tool::generateRandNum(10, Range(0, 20), numSet);
 	Tool::show(numSet);
 	Tool::cocktailSort(numSet);
+	Tool::show(numSet);
+
+	cout << "\nSelect sort" << endl;
+	Tool::generateRandNum(10, Range(0, 20), numSet);
+	Tool::show(numSet);
+	Tool::selectSort(numSet);
 	Tool::show(numSet);
 
 	return 0;

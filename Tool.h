@@ -51,6 +51,9 @@ public:
 	template <typename T>
 	static void cocktailSort(std::vector<T>& items);
 
+	template <typename T>
+	static void selectSort(std::vector<T>& items);
+
 private:
 	static Tool tool;///< Initialize the program, such as set random seed.
 	Tool(void);
@@ -176,3 +179,20 @@ void Tool::cocktailSort(std::vector<T>& items)
 				std::swap(items[j - 1], items[j]);
 	}
 }
+
+template <typename T>
+void Tool::selectSort(std::vector<T>& items)
+{
+	int count = items.size();
+	for (int i = 0; i < count; ++i)
+	{
+		int swapIndex = i;
+		for (int j = i + 1; j < count; ++j)
+			if (items[j] < items[swapIndex])
+				swapIndex = j;
+
+		if (swapIndex != i)
+			std::swap(items[i], items[swapIndex]);
+	}
+}
+
