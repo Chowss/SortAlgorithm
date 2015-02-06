@@ -1,5 +1,6 @@
 #include "Tool.h"
 #include <string>
+#include <algorithm>
 #include <time.h>
 #include <stdlib.h>
 using namespace std;
@@ -19,32 +20,21 @@ void Tool::generateRandNum(int count, const Range& range, std::vector<int>& numS
 {
 	numSet.clear();
 
-	if (count <= 0)
-	{
-		DebugErr;
-		return;
-	}
-
 	int origin = range.max - range.min;
-	if (origin < 0)
+	if (count <= 0 || origin < 0)
 	{
 		DebugErr;
 		return;
 	}
-	else if (origin == 0)
+	
+	if (origin == 0)
 	{
 		numSet = std::vector<int>(count, range.min);
 		return;
 	}
-	else
-	{
-		numSet.resize(count);
 
-		for (auto& item : numSet)
-		{
-			item = rand() % origin + range.min;
-		}
-	}
+	numSet.resize(count);
+	std::generate(numSet.begin(), numSet.end(), [&] { return rand() % origin + range.min; });
 
 	return;
 }
