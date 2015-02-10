@@ -7,42 +7,47 @@ int main()
 {
 	cout << "Sort Algorithm" << endl;
 
+	//Initialize variables.
 	vector<int> numSet;
+	int count = 15;
+	Range range(0, 30);
+
+	typedef void (*SortFunc)(vector<int>&);
+	auto callSort = [&](SortFunc sortFunc) {
+		//Generate random numbers.
+		Tool::generateRandNum(count, range, numSet);
+		Tool::show(numSet, count);
+
+		//Sort numbers.
+		(sortFunc)(numSet);
+		Tool::show(numSet, count);
+
+		//Check whether is sorted.
+		if (!Tool::check(numSet))
+			cout << "Error !!!" << endl;
+	};
+
+	//Call different sort algorithms.
 	cout << "\nBubble sort" << endl;
-	Tool::generateRandNum(10, Range(0, 20), numSet);
-	Tool::show(numSet);
-	Tool::bubbleSort(numSet);
-	Tool::show(numSet);
+	callSort(Tool::bubbleSort);
 
 	cout << "\nQuick sort" << endl;
-	Tool::generateRandNum(10, Range(0, 20), numSet);
-	Tool::show(numSet);
-	Tool::quickSort(numSet.begin(), numSet.end() - 1);
-	Tool::show(numSet);
+	callSort(Tool::quickSort);
 
 	cout << "\nInsert sort" << endl;
-	Tool::generateRandNum(10, Range(0, 20), numSet);
-	Tool::show(numSet);
-	Tool::insertSort(numSet);
-	Tool::show(numSet);
+	callSort(Tool::insertSort);
 
 	cout << "\nBinary insert sort" << endl;
-	Tool::generateRandNum(10, Range(0, 20), numSet);
-	Tool::show(numSet);
-	Tool::binaryInsertSort(numSet);
-	Tool::show(numSet);
+	callSort(Tool::binaryInsertSort);
 
 	cout << "\nCocktail sort" << endl;
-	Tool::generateRandNum(10, Range(0, 20), numSet);
-	Tool::show(numSet);
-	Tool::cocktailSort(numSet);
-	Tool::show(numSet);
+	callSort(Tool::cocktailSort);
 
 	cout << "\nSelect sort" << endl;
-	Tool::generateRandNum(10, Range(0, 20), numSet);
-	Tool::show(numSet);
-	Tool::selectSort(numSet);
-	Tool::show(numSet);
+	callSort(Tool::selectSort);
+
+	cout << "\nHeap sort" << endl;
+	callSort(Tool::heapSort);
 
 	return 0;
 }

@@ -9,9 +9,9 @@
 #endif
 
 #define ForEachBeginEnd(itr, begin, end, container) for (auto (itr) = (begin); (itr) != (end); ++(itr))
-#define ForEachBegin(itr, begin, container) ForEachBeginEnd(itr, begin, container.end(), container)
-#define ForEachEnd(itr, end, container) ForEachBeginEnd(itr, container.begin(), end, container)
-#define ForEach(itr, container) ForEachBegin(itr, container.begin(), container)
+#define ForEachBegin(itr, begin, container) ForEachBeginEnd((itr), (begin), container.end(), container)
+#define ForEachEnd(itr, end, container) ForEachBeginEnd((itr), container.begin(), (end), container)
+#define ForEach(itr, container) ForEachBegin((itr), container.begin(), container)
 #define PrintLn(content) std::cout << (content) << std::endl
 
 struct Range
@@ -37,10 +37,13 @@ public:
 	static void show(const std::vector<T>& numSet, int itemsPerLine = 10);
 
 	template <typename T>
+	static bool check(const std::vector<T>& items);
+
+	template <typename T>
 	static void bubbleSort(std::vector<T>& items);
 
-	template <typename Iterator>
-	static void quickSort(Iterator itrL, Iterator itrR);
+	template <typename T>
+	static void quickSort(std::vector<T>& items);
 
 	template <typename T>
 	static void insertSort(std::vector<T>& items);
@@ -54,7 +57,16 @@ public:
 	template <typename T>
 	static void selectSort(std::vector<T>& items);
 
+	template <typename T>
+	static void heapSort(std::vector<T>& items);
+
 private:
+	template <typename Iterator>
+	static void quickSort(Iterator itrL, Iterator itrR);
+
+	template <typename T>
+	static void heapAdjust(int index, std::vector<T>& items, int count);
+
 	static Tool tool;///< Initialize the program, such as set random seed.
 	Tool(void);
 
@@ -88,12 +100,28 @@ void Tool::show(const std::vector<T>& numSet, int itemsPerLine)
 }
 
 template <typename T>
+bool Tool::check(const std::vector<T>& items)
+{
+	ForEachBegin (itr, items.begin() + 1, items)
+		if (*(itr - 1) > *itr)
+			return false;
+
+	return true;
+}
+
+template <typename T>
 void Tool::bubbleSort(std::vector<T>& items)
 {
 	ForEach (itrA, items)
 		ForEachBegin (itrB, itrA + 1, items)
 			if (*itrA > *itrB)
 				std::swap(*itrA, *itrB);
+}
+
+template <typename T>
+void Tool::quickSort(std::vector<T>& items)
+{
+	quickSort(items.begin(), items.end() - 1);
 }
 
 template <typename Iterator>
@@ -196,3 +224,35 @@ void Tool::selectSort(std::vector<T>& items)
 	}
 }
 
+template <typename T>
+void Tool::heapAdjust(int index, std::vector<T>& items, int count)
+{
+	int l = (index << 1) + 1;
+	int r = (index << 1) + 2;
+	int minIndex = index;
+	if (l < count && items[l] > items[index])
+		minIndex = l;
+
+	if (r < count && items[r] > items[minIndex])
+		minIndex = r;
+
+	if (minIndex != index)
+	{
+		std::swap(items[index], items[minIndex]);
+		heapAdjust(minIndex, items, count);
+	}
+}
+
+template <typename T>
+void Tool::heapSort(std::vector<T>& items)
+{
+	size_t count = items.size();
+	for (int i = (count - 2) / 2; i >= 0; --i)
+		heapAdjust(i, items, count);
+
+	for (int i = count - 1; i > 0; --i)
+	{
+		std::swap(items[0], items[i]);
+		heapAdjust(0, items, i);
+	}
+}
