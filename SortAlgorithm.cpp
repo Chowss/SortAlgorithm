@@ -10,7 +10,7 @@ int main()
 	//Initialize variables.
 	vector<int> numSet;
 	int count = 15;
-	Range range(0, 30);
+	Range range(-10, 40);
 
 	typedef void (*SortFunc)(vector<int>&);
 	auto callSort = [&](SortFunc sortFunc) {
@@ -48,6 +48,9 @@ int main()
 
 	cout << "\nHeap sort" << endl;
 	callSort(Tool::heapSort);
+
+	cout << "\nPeagonhole sort" << endl;
+	callSort(Tool::peagonholeSort);
 
 	return 0;
 }

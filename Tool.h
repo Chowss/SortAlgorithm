@@ -60,6 +60,9 @@ public:
 	template <typename T>
 	static void heapSort(std::vector<T>& items);
 
+	template <typename T>
+	static void peagonholeSort(std::vector<T>& items);
+
 private:
 	template <typename Iterator>
 	static void quickSort(Iterator itrL, Iterator itrR);
@@ -255,4 +258,31 @@ void Tool::heapSort(std::vector<T>& items)
 		std::swap(items[0], items[i]);
 		heapAdjust(0, items, i);
 	}
+}
+
+template <typename T>
+void Tool::peagonholeSort(std::vector<T>& items)
+{
+	if (items.size() < 2)
+		return;
+
+	T minNum = items.front();
+	T maxNum = items.front();
+
+	for (const T& item : items) {
+		if (maxNum < item) maxNum = item;
+		if (minNum > item) minNum = item;
+	}
+
+	for (T& item : items)
+		item -= minNum;
+
+	std::vector<T> indexSet(maxNum - minNum + 1, 0);
+	for (T& item : items)
+		++(indexSet[item]);
+
+	int index = 0;
+	for (size_t i = 0; i < indexSet.size(); ++i)
+		for (int j = 0; j < indexSet[i]; ++j)
+			items[index++] = i + minNum;
 }
