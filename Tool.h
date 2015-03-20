@@ -63,12 +63,18 @@ public:
 	template <typename T>
 	static void peagonholeSort(std::vector<T>& items);
 
+	template <typename T>
+	static void mergeSort(std::vector<T>& items);
+
 private:
 	template <typename Iterator>
 	static void quickSort(Iterator itrL, Iterator itrR);
 
 	template <typename T>
 	static void heapAdjust(int index, std::vector<T>& items, int count);
+
+	template <typename T>
+	static void mergeSort(std::vector<T>& items, std::vector<T>& tmp, size_t st, size_t ed);
 
 	static Tool tool;///< Initialize the program, such as set random seed.
 	Tool(void);
@@ -285,4 +291,43 @@ void Tool::peagonholeSort(std::vector<T>& items)
 	for (size_t i = 0; i < indexSet.size(); ++i)
 		for (int j = 0; j < indexSet[i]; ++j)
 			items[index++] = i + minNum;
+}
+
+template <typename T>
+void Tool::mergeSort(std::vector<T>& items, std::vector<T>& tmp, size_t st, size_t ed)
+{
+	if (st < ed)
+	{
+		size_t mid = (st + ed) / 2;
+		mergeSort(items, tmp, st, mid);
+		mergeSort(items, tmp, mid + 1, ed);
+
+		size_t i = st;
+		size_t j = mid + 1;
+		size_t k = st;
+		while (i <= mid && j <= ed)
+		{
+			if (items[i] < items[j])
+				tmp[k++] = items[i++];
+			else
+				tmp[k++] = items[j++];
+		}
+
+		while (i <= mid)
+			tmp[k++] = items[i++];
+
+		while (j <= ed)
+			tmp[k++] = items[j++];
+
+		for (i = st; i <= ed; ++i)
+			items[i] = tmp[i];
+	}
+}
+
+template <typename T>
+void Tool::mergeSort(std::vector<T>& items)
+{
+	size_t end = items.size() - 1;
+	std::vector<T> tmp(items.size());
+	mergeSort(items, tmp, 0, end);
 }

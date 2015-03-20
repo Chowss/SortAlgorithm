@@ -52,5 +52,8 @@ int main()
 	cout << "\nPeagonhole sort" << endl;
 	callSort(Tool::peagonholeSort);
 
+	cout << "\nMerge sort" << endl;
+	callSort(Tool::mergeSort);
+
 	return 0;
 }
